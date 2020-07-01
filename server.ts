@@ -2,27 +2,26 @@
 import 'zone.js/dist/zone-node';
 
 import { ngExpressEngine } from '@nguniversal/express-engine';
-import * as express from 'express';
+import express from 'express';
 import { join } from 'path';
 
 // ssr DOM
-// const domino = require('domino');
-// const fs = require('fs');
-// const path = require('path');
+const domino = require('domino');
+const fs = require('fs');
+const path = require('path');
 // // index from browser build!
-// const template = fs.readFileSync(path.join('.', 'dist', 'app', 'browser', 'index.html')).toString();
+const template = fs.readFileSync(path.join('.', 'dist', 'app', 'browser', 'index.html')).toString();
 // // for mock global window by domino
-// const win = domino.createWindow(template);
+const win = domino.createWindow(template);
 // // (window as any).global = win;
 // global['window'] = win;
-// global['document'] = win.document;
+global['document'] = win.document;
 
 import { AppServerModule } from './src/main.server';
 import { APP_BASE_HREF } from '@angular/common';
 import { existsSync } from 'fs';
-import * as compression from 'compression';
-import * as cookieparser from 'cookie-parser';
-global['XMLHttpRequest'] = require('xhr2');
+import compression from 'compression';
+import cookieParser from 'cookie-parser';
 
 export function app() {
   const server = express();
@@ -104,7 +103,7 @@ function run(): void {
   // gzip
   server.use(compression());
   // cokies
-  server.use(cookieparser());
+  server.use(cookieParser());
   server.listen(port, () => {
     console.log(`Node Express server listening on http://localhost:${port}`);
   });
