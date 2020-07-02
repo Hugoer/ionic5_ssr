@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-folder',
   templateUrl: './folder.page.html',
@@ -8,11 +10,33 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class FolderPage implements OnInit {
   public folder: string;
-
-  constructor(private activatedRoute: ActivatedRoute) { }
+  coffeeCollection: AngularFirestoreCollection<any>;
+  coffee$: Observable<any>;
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private afs: AngularFirestore,
+  ) {
+    this.coffeeCollection = this.afs.collection('coffeeshop');
+  }
 
   ngOnInit() {
     this.folder = this.activatedRoute.snapshot.paramMap.get('id');
+    this.loadCoffeshop();
+  }
+  // .doc('TsqbkxCsmS8J6B85MEMG')
+  // .get()
+  // .pipe(
+  //   take(1)
+  // )
+  // .subscribe((coffee) => {
+  //   console.log(coffee);
+  // });
+  private loadCoffeshop() {
+    this.coffee$ = this.afs.doc('coffeeshop/TsqbkxCsmS8J6B85MEMG')
+      .get()
+      .pipe(
+        map((coffee) => coffee.data())
+      );
   }
 
 }
