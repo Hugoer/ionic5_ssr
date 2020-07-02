@@ -30,7 +30,7 @@ export class FolderPage implements OnInit {
   }
 
   private loadCoffeshop() {
-    this.coffee$ = this.afs.doc('coffeeshop/TsqbkxCsmS8J6B85MEMG')
+    this.coffee$ = this.coffeeCollection.doc('TsqbkxCsmS8J6B85MEMG')
       .get()
       .pipe(
         map((coffee) => {

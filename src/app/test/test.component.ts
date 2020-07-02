@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+
 @Component({
   selector: 'app-test',
   template: `
@@ -37,7 +38,7 @@ export class TestPage implements OnInit {
   }
 
   private loadCoffeshop() {
-    this.coffee2$ = this.afs.doc('coffeeshop/TsqbkxCsmS8J6B85MEMG').valueChanges();
+    this.coffee2$ = this.coffeeCollection.doc('TsqbkxCsmS8J6B85MEMG').valueChanges();
   }
 
 }
