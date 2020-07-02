@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
-import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { tap, map } from 'rxjs/operators';
+
 @Component({
   selector: 'app-folder',
   templateUrl: './folder.page.html',
@@ -10,11 +11,15 @@ import { Observable } from 'rxjs';
 })
 export class FolderPage implements OnInit {
   public folder: string;
+
   coffeeCollection: AngularFirestoreCollection<any>;
+
   coffee$: Observable<any>;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private afs: AngularFirestore,
+    private cd: ChangeDetectorRef,
   ) {
     this.coffeeCollection = this.afs.collection('coffeeshop');
   }
@@ -23,19 +28,15 @@ export class FolderPage implements OnInit {
     this.folder = this.activatedRoute.snapshot.paramMap.get('id');
     this.loadCoffeshop();
   }
-  // .doc('TsqbkxCsmS8J6B85MEMG')
-  // .get()
-  // .pipe(
-  //   take(1)
-  // )
-  // .subscribe((coffee) => {
-  //   console.log(coffee);
-  // });
+
   private loadCoffeshop() {
     this.coffee$ = this.afs.doc('coffeeshop/TsqbkxCsmS8J6B85MEMG')
       .get()
       .pipe(
-        map((coffee) => coffee.data())
+        map((coffee) => {
+          return coffee.data();
+        }),
+        tap(() => this.cd.markForCheck()),
       );
   }
 
